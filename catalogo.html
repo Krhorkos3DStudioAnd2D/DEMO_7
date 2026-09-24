@@ -353,7 +353,7 @@
         <div class="products-grid">
 
             <!-- Producto 1 -->
-            <div class="product-card" onclick="toggleProduct(this)" data-name="[NOMBRE_PRODUCTO]" data-price="[PRECIO]">
+            <div class="product-card" onclick="toggleProduct(this)" data-name="[NOMBRE_PRODUCTO]" data-price="4.50">
                 <div class="product-image-container">
                     <img src="[IMAGEN_PRODUCTO]" alt="[NOMBRE_PRODUCTO]" loading="lazy">
                     <div class="select-badge">Disponible</div>
@@ -362,14 +362,14 @@
                     <h3 class="product-title">[NOMBRE_PRODUCTO]</h3>
                     <p class="product-description">[DESCRIPCION_PRODUCTO]</p>
                     <div class="product-footer">
-                        <span class="product-price">$[PRECIO]</span>
+                        <span class="product-price">$4.50</span>
                         <span class="product-action-hint">Seleccionar +</span>
                     </div>
                 </div>
             </div>
 
             <!-- Producto 2 -->
-            <div class="product-card" onclick="toggleProduct(this)" data-name="[NOMBRE_PRODUCTO]" data-price="[PRECIO]">
+            <div class="product-card" onclick="toggleProduct(this)" data-name="[NOMBRE_PRODUCTO]" data-price="3.75">
                 <div class="product-image-container">
                     <img src="[IMAGEN_PRODUCTO]" alt="[NOMBRE_PRODUCTO]" loading="lazy">
                     <div class="select-badge">Disponible</div>
@@ -378,14 +378,14 @@
                     <h3 class="product-title">[NOMBRE_PRODUCTO]</h3>
                     <p class="product-description">[DESCRIPCION_PRODUCTO]</p>
                     <div class="product-footer">
-                        <span class="product-price">$[PRECIO]</span>
+                        <span class="product-price">$3.75</span>
                         <span class="product-action-hint">Seleccionar +</span>
                     </div>
                 </div>
             </div>
 
             <!-- Producto 3 -->
-            <div class="product-card" onclick="toggleProduct(this)" data-name="[NOMBRE_PRODUCTO]" data-price="[PRECIO]">
+            <div class="product-card" onclick="toggleProduct(this)" data-name="[NOMBRE_PRODUCTO]" data-price="5.00">
                 <div class="product-image-container">
                     <img src="[IMAGEN_PRODUCTO]" alt="[NOMBRE_PRODUCTO]" loading="lazy">
                     <div class="select-badge">Disponible</div>
@@ -394,14 +394,14 @@
                     <h3 class="product-title">[NOMBRE_PRODUCTO]</h3>
                     <p class="product-description">[DESCRIPCION_PRODUCTO]</p>
                     <div class="product-footer">
-                        <span class="product-price">$62</span>
+                        <span class="product-price">$5.00</span>
                         <span class="product-action-hint">Seleccionar +</span>
                     </div>
                 </div>
             </div>
 
             <!-- Producto 4 -->
-            <div class="product-card" onclick="toggleProduct(this)" data-name="[NOMBRE_PRODUCTO]" data-price="[PRECIO]">
+            <div class="product-card" onclick="toggleProduct(this)" data-name="[NOMBRE_PRODUCTO]" data-price="2.50">
                 <div class="product-image-container">
                     <img src="[IMAGEN_PRODUCTO]" alt="[NOMBRE_PRODUCTO]" loading="lazy">
                     <div class="select-badge">Disponible</div>
@@ -410,7 +410,7 @@
                     <h3 class="product-title">[NOMBRE_PRODUCTO]</h3>
                     <p class="product-description">[DESCRIPCION_PRODUCTO]</p>
                     <div class="product-footer">
-                        <span class="product-price">$43</span>
+                        <span class="product-price">$2.50</span>
                         <span class="product-action-hint">Seleccionar +</span>
                     </div>
                 </div>
@@ -419,7 +419,6 @@
         </div>
     </main>
 
-    <!-- Barra Inferior de Pedido y WhatsApp -->
     <div class="order-bar" id="orderBar">
         <div class="order-summary">
             <div class="summary-item">
@@ -437,7 +436,6 @@
         </button>
     </div>
 
-    <!-- Script de Funcionalidad de Selección y Envío -->
     <script>
         function toggleProduct(card) {
             card.classList.toggle('selected');
@@ -463,8 +461,9 @@
             
             let total = 0;
             selectedCards.forEach(card => {
-                const priceStr = card.getAttribute('data-price').replace(/[^0-9.]/g, '');
-                const price = parseFloat(priceStr) || 0;
+                const rawPrice = card.getAttribute('data-price');
+                const cleanPrice = rawPrice ? rawPrice.replace(/[^0-9.]/g, '') : '0';
+                const price = parseFloat(cleanPrice) || 0;
                 total += price;
             });
 
@@ -487,8 +486,9 @@
 
             selectedCards.forEach((card, index) => {
                 const name = card.getAttribute('data-name');
-                const priceStr = card.getAttribute('data-price').replace(/[^0-9.]/g, '');
-                const price = parseFloat(priceStr) || 0;
+                const rawPrice = card.getAttribute('data-price');
+                const cleanPrice = rawPrice ? rawPrice.replace(/[^0-9.]/g, '') : '0';
+                const price = parseFloat(cleanPrice) || 0;
                 total += price;
 
                 message += `${index + 1}. ${name} - $${price.toFixed(2)}\n`;
@@ -496,7 +496,7 @@
 
             message += `\n*Total a pagar: $${total.toFixed(2)}*\n\nQuedo atento a la confirmación. ¡Gracias!`;
 
-            // Marcador del número de WhatsApp para cambiar fácilmente
+            // ================================================================================== Reemplazo el numero de Whatsapp por el del negocio ==================================================================================
             const phoneNumber = "[NUMERO_WHATSAPP]"; 
             const encodedMessage = encodeURIComponent(message);
             
