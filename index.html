@@ -1,564 +1,495 @@
-
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth dark">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>[NOMBRE_DE_LA_CAFETERIA] — Experiencia de Café de Lujo</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        dark: {
-                            950: '#070606',
-                            900: '#0c0b0b',
-                            850: '#121111',
-                            800: '#1a1818',
-                            700: '#262424',
-                            600: '#3d3939'
-                        },
-                        amber: {
-                            400: '#fbbf24',
-                            500: '#d97706',
-                            600: '#b45309',
-                            700: '#92400e'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif']
-                    }
-                }
-            }
-        }
-    </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <title>[NOMBRE_DE_LA_CAFETERIA] — Bienvenidos</title>
+    
     <!-- Leaflet CSS para el mapa interactivo -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    
     <style>
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0c0b0b;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #262424;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #d97706;
-        }
-        
-        .glass-panel {
-            background: rgba(26, 24, 24, 0.7);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(217, 119, 6, 0.15);
+        :root {
+            --bg-color: #0c0a09;
+            --surface-color: #171412;
+            --surface-hover: #211c18;
+            --border-color: #29231f;
+            --text-main: #f5f5f4;
+            --text-muted: #a8a29e;
+            --accent-color: #d97706;
+            --accent-hover: #f59e0b;
+            --accent-glow: rgba(217, 119, 6, 0.25);
+            --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .glass-panel-hover {
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .glass-panel-hover:hover {
-            transform: translateY(-4px);
-            border-color: rgba(217, 119, 6, 0.4);
-            box-shadow: 0 20px 40px -15px rgba(217, 119, 6, 0.15);
-        }
-
-        .fade-in-section {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
-            will-change: opacity, transform;
-        }
-        .fade-in-section.is-visible {
-            opacity: 1;
-            transform: none;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            scroll-behavior: smooth;
         }
 
-        /* Mapa personalizado estilo oscuro */
-        .leaflet-container {
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Barra de Navegación Profesional */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 100%;
-            background: #121111 !important;
-            font-family: 'Inter', sans-serif;
+            background-color: rgba(12, 10, 9, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 5%;
         }
-        .leaflet-popup-content-wrapper, .leaflet-popup-tip {
-            background: #1a1818 !important;
-            color: #f3f4f6 !important;
-            border: 1px solid rgba(217, 119, 6, 0.3);
-            border-radius: 12px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: var(--text-main);
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            transition: var(--transition-smooth);
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .nav-btn {
+            background-color: var(--surface-hover);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1.25rem;
+            border-radius: 2rem;
+            color: var(--text-main) !important;
+            transition: var(--transition-smooth);
+        }
+
+        .nav-btn:hover {
+            border-color: var(--accent-color);
+            background-color: var(--accent-color);
+        }
+
+        /* Secciones Generales */
+        section {
+            padding: 8rem 5% 6rem 5%;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* 1. Portada / Bienvenida */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding-top: 6rem;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            animation: fadeInDown 0.8s ease forwards;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 30%, var(--text-muted) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 0.8s ease 0.2s forwards;
+            opacity: 0;
+        }
+
+        .hero p {
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            color: var(--text-muted);
+            max-width: 650px;
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 0.8s ease 0.4s forwards;
+            opacity: 0;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            animation: fadeInUp 0.8s ease 0.6s forwards;
+            opacity: 0;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 0.9rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: var(--transition-smooth);
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: #ffffff;
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--surface-color);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-muted);
+            background-color: var(--surface-hover);
+        }
+
+        /* Títulos de Sección */
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 3.5vw, 2.75rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+
+        /* 2. Información */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .info-card {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            padding: 2.5rem;
+            border-radius: 1rem;
+            transition: var(--transition-smooth);
+        }
+
+        .info-card:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .info-card h3 {
+            font-size: 1.35rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+
+        .info-card p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+
+        /* 3. Horarios */
+        .hours-container {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .hour-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 1.05rem;
+        }
+
+        .hour-row:last-child {
+            border-bottom: none;
+        }
+
+        .hour-row span:first-child {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .hour-row span:last-child {
+            color: var(--text-muted);
+        }
+
+        /* 4. Contacto y 5. Ubicación (Grid Split) */
+        .location-contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: stretch;
+        }
+
+        @media (max-width: 968px) {
+            .location-contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .contact-box, .location-box {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .contact-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 1.05rem;
+            transition: var(--transition-smooth);
+        }
+
+        .contact-item:hover {
+            color: var(--accent-color);
+        }
+
+        /* MAPA INTERACTIVO CORREGIDO (Altura obligatoria de 350px) */
+        #map {
+            width: 100%;
+            height: 350px;
+            border-radius: 0.75rem;
+            margin-top: 1.5rem;
+            border: 1px solid var(--border-color);
+            z-index: 10;
+        }
+
+        .address-text {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 5%;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            background-color: var(--surface-color);
+        }
+
+        /* Animaciones clave */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            section { padding: 6rem 5% 4rem 5%; }
         }
     </style>
 </head>
-<body class="bg-dark-950 text-gray-100 antialiased selection:bg-amber-500 selection:text-white relative overflow-x-hidden">
+<body>
 
-    <div id="scroll-progress" class="fixed top-0 left-0 h-[2px] bg-gradient-to-r from-amber-600 to-amber-400 z-50 transition-all duration-150" style="width: 0%;"></div>
-
-    <header id="navbar" class="fixed top-0 left-0 right-0 z-40 transition-all duration-500 bg-dark-950/80 backdrop-blur-xl border-b border-dark-800/80">
-        <div class="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
-            <a href="#inicio" class="flex items-center space-x-3 group">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow-lg shadow-amber-600/20 group-hover:scale-105 transition-transform">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8zM6 1v3m6-3v3"></path>
-                    </svg>
-                </div>
-                <span class="text-xl font-serif font-bold tracking-wider text-white group-hover:text-amber-500 transition-colors">
-                    [NOMBRE_DE_LA_CAFETERIA]
-                </span>
-            </a>
-            
-            <nav class="hidden lg:flex items-center space-x-8 text-sm font-medium tracking-wide text-gray-300">
-                <a href="#inicio" class="hover:text-amber-400 transition-colors">Inicio</a>
-                <a href="#nosotros" class="hover:text-amber-400 transition-colors">Esencia</a>
-                <a href="#menu" class="hover:text-amber-400 transition-colors">Especialidades</a>
-                <a href="#horarios" class="hover:text-amber-400 transition-colors">Horarios</a>
-                <a href="#ubicacion" class="hover:text-amber-400 transition-colors">Ubicación</a>
-                <a href="#contacto" class="hover:text-amber-400 transition-colors">Contacto</a>
-            </nav>
-
-            <div class="hidden lg:flex items-center space-x-4">
-                <button onclick="openModal()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-medium text-sm transition-all shadow-lg shadow-amber-600/20 hover:shadow-amber-600/40 transform hover:-translate-y-0.5">
-                    Reservar Mesa
-                </button>
-            </div>
-
-            <div class="lg:hidden flex items-center">
-                <button id="menu-btn" class="p-2 text-gray-300 hover:text-white focus:outline-none">
-                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-            </div>
-        </div>
-
-        <!-- Menú Móvil Desplegable -->
-        <div id="mobile-menu" class="hidden lg:hidden bg-dark-900 border-b border-dark-800 px-6 py-6 space-y-4">
-            <a href="#inicio" class="block text-gray-300 hover:text-amber-400 text-lg font-medium transition-colors">Inicio</a>
-            <a href="#nosotros" class="block text-gray-300 hover:text-amber-400 text-lg font-medium transition-colors">Esencia</a>
-            <a href="#menu" class="block text-gray-300 hover:text-amber-400 text-lg font-medium transition-colors">Especialidades</a>
-            <a href="#horarios" class="block text-gray-300 hover:text-amber-400 text-lg font-medium transition-colors">Horarios</a>
-            <a href="#ubicacion" class="block text-gray-300 hover:text-amber-400 text-lg font-medium transition-colors">Ubicación</a>
-            <a href="#contacto" class="block text-gray-300 hover:text-amber-400 text-lg font-medium transition-colors">Contacto</a>
-            <div class="pt-2">
-                <button onclick="openModal(); closeMobileMenu();" class="w-full py-3 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-medium text-center transition-all shadow-lg shadow-amber-600/20">
-                    Reservar Mesa
-                </button>
-            </div>
-        </div>
+    <!-- Encabezado -->
+    <header>
+        <a href="index.html" class="logo">[NOMBRE_DE_LA_CAFETERIA]</a>
+        <ul class="nav-links">
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#informacion">Nosotros</a></li>
+            <li><a href="#horarios">Horarios</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+            <li><a href="#ubicacion">Ubicación</a></li>
+            <li><a href="catalogo.html" class="nav-btn">Catálogo</a></li>
+        </ul>
     </header>
 
-    <section id="inicio" class="relative min-h-screen flex items-center justify-center pt-24 px-6 overflow-hidden bg-dark-950">
-        <!-- Efectos ambientales de luz dorada -->
-        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-600/10 rounded-full blur-[120px] pointer-events-none"></div>
-        <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#d97706_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
+    <!-- 1. Portada / Bienvenida -->
+    <section id="inicio" class="hero">
+        <div class="hero-badge">
+            <span>✨ [FRASE_BREVE_ETIQUETA]</span>
+        </div>
+        <h1>[NOMBRE_DE_LA_CAFETERIA]</h1>
+        <p>[FRASE_DE_BIENVENIDA]</p>
+        <div class="hero-actions">
+            <a href="catalogo.html" class="btn-primary">Ver Catálogo</a>
+            <a href="#contacto" class="btn-secondary">Contáctanos</a>
+        </div>
+    </section>
 
-        <div class="relative max-w-5xl mx-auto text-center space-y-8 fade-in-section z-10">
-            <div class="inline-flex items-center space-x-2 px-4 py-2 rounded-full glass-panel text-amber-400 text-xs font-semibold tracking-widest uppercase border border-amber-500/20">
-                <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-                <span>[ETIQUETA_SUPERIOR]</span>
+    <!-- 2. Información -->
+    <section id="informacion">
+        <div class="section-header">
+            <h2>Nuestra Esencia</h2>
+            <p>Conoce más sobre el espacio y la pasión detrás de cada taza.</p>
+        </div>
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>[TITULO_SECCION_1]</h3>
+                <p>[DESCRIPCION]</p>
+            </div>
+            <div class="info-card">
+                <h3>[TITULO_SECCION_2]</h3>
+                <p>[DESCRIPCION_ADICIONAL]</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Horarios -->
+    <section id="horarios">
+        <div class="section-header">
+            <h2>Horarios de Atención</h2>
+            <p>Te esperamos con el café recién hecho todos los días de la semana.</p>
+        </div>
+        <div class="hours-container">
+            <div class="hour-row">
+                <span>[DIA_SEMANA_1]</span>
+                <span>[DIA_HORARIO]</span>
+            </div>
+            <div class="hour-row">
+                <span>[DIA_SEMANA_2]</span>
+                <span>[DIA_HORARIO]</span>
+            </div>
+            <div class="hour-row">
+                <span>[DIA_SEMANA_3]</span>
+                <span>[DIA_HORARIO]</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Contacto y 5. Ubicación -->
+    <section id="contacto">
+        <div class="section-header">
+            <h2>Encuéntranos y Conéctate</h2>
+            <p>Estamos a un mensaje o a una visita de distancia.</p>
+        </div>
+        
+        <div class="location-contact-grid">
+            <!-- 4. Contacto -->
+            <div class="contact-box">
+                <div>
+                    <h3>Canales de Comunicación</h3>
+                    <div class="contact-details">
+                        <a href="mailto:[CORREO_CONTACTO]" class="contact-item">
+                            📧 <span>[CORREO_CONTACTO]</span>
+                        </a>
+                        <a href="https://wa.me/[NUMERO_WHATSAPP]" target="_blank" class="contact-item">
+                            💬 <span>WhatsApp: [NUMERO_WHATSAPP]</span>
+                        </a>
+                    </div>
+                </div>
+                <a href="https://wa.me/[NUMERO_WHATSAPP]" target="_blank" class="btn-primary" style="text-align: center;">Escribir por WhatsApp</a>
             </div>
 
-            <h1 class="text-5xl sm:text-7xl lg:text-8xl font-serif font-bold tracking-tight text-white leading-[1.1]">
-                [NOMBRE_DE_LA_CAFETERIA]
-            </h1>
-
-            <p class="text-xl sm:text-2xl text-gray-300 max-w-2xl mx-auto font-light leading-relaxed font-serif italic">
-                "[FRASE_DE_BIENVENIDA]"
-            </p>
-
-            <div class="pt-6 flex flex-col sm:flex-row justify-center items-center gap-5">
-                <a href="#menu" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-medium transition-all shadow-xl shadow-amber-600/25 tracking-wide text-center">
-                    Explorar Menú
-                </a>
-                <a href="#ubicacion" class="w-full sm:w-auto px-8 py-4 rounded-xl glass-panel hover:bg-dark-800 text-gray-200 border border-dark-700 font-medium transition-all tracking-wide text-center">
-                    Ver Ubicación
-                </a>
-            </div>
-
-            <!-- Mini estadísticas flotantes de lujo -->
-            <div class="pt-16 grid grid-cols-2 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
-                <div class="glass-panel p-5 rounded-2xl text-center">
-                    <div class="text-2xl font-serif font-bold text-amber-400">[ESTADISTICA_1]</div>
-                    <div class="text-xs text-gray-400 uppercase tracking-wider mt-1">[ETIQUETA_ESTADISTICA_1]</div>
+            <div class="location-box" id="ubicacion">
+                <div>
+                    <h3>Ubicación</h3>
+                    <p class="address-text" style="margin-top: 0.75rem;">[DIRECCION_COMPLETA]</p>
+                    
+                    <!-- ================================================================================ AQUI DEBO DE CAMBIAR LA URL POR LA URL DE LA CAFETERIA AQUI ================================================================================ -->
+                    <div id="map"></div>
                 </div>
-                <div class="glass-panel p-5 rounded-2xl text-center">
-                    <div class="text-2xl font-serif font-bold text-amber-400">[ESTADISTICA_2]</div>
-                    <div class="text-xs text-gray-400 uppercase tracking-wider mt-1">[ETIQUETA_ESTADISTICA_2]</div>
-                </div>
-                <div class="col-span-2 md:col-span-1 glass-panel p-5 rounded-2xl text-center">
-                    <div class="text-2xl font-serif font-bold text-amber-400">[ESTADISTICA_3]</div>
-                    <div class="text-xs text-gray-400 uppercase tracking-wider mt-1">[ETIQUETA_ESTADISTICA_3]</div>
+                <div style="margin-top: 1.5rem;">
+                    <a href="https://maps.app.goo.gl/HmNZAZLE4s12BcLT7" target="_blank" class="btn-secondary" style="display: block; text-align: center;">Abrir en Google Maps</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="nosotros" class="py-28 px-6 bg-dark-900 border-t border-dark-800/80 relative">
-        <div class="max-w-6xl mx-auto fade-in-section">
-            <div class="text-center space-y-4 mb-20">
-                <span class="text-amber-500 font-semibold tracking-widest uppercase text-xs">Artesanía & Pasión</span>
-                <h2 class="text-4xl sm:text-5xl font-serif font-bold tracking-tight text-white">[SUBTITULO_HISTORIA]</h2>
-                <div class="w-20 h-0.5 bg-amber-500 mx-auto"></div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div class="glass-panel p-8 sm:p-10 rounded-3xl space-y-6 shadow-2xl relative overflow-hidden">
-                    <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
-                    <h3 class="text-2xl font-serif font-semibold text-amber-400">[TITULO_BLOQUE_NOSOTROS]</h3>
-                    <p class="text-gray-300 leading-relaxed font-light text-base sm:text-lg">
-                        [DESCRIPCION]
-                    </p>
-                    <p class="text-gray-400 text-sm leading-relaxed">
-                        [DESCRIPCION_SECUNDARIA]
-                    </p>
-                    <div class="pt-4 flex items-center space-x-4">
-                        <div class="w-12 h-12 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-400 font-serif font-bold text-lg border border-amber-500/20">
-                            ☕
-                        </div>
-                        <div>
-                            <div class="text-white font-medium">[AUTOR_CITA]</div>
-                            <div class="text-xs text-gray-400">[CARGO_AUTOR]</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div class="glass-panel glass-panel-hover p-8 rounded-3xl space-y-4">
-                        <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl">
-                            🌿
-                        </div>
-                        <h4 class="text-lg font-serif font-semibold text-white">[PILAR_1_TITULO]</h4>
-                        <p class="text-sm text-gray-400 leading-relaxed">[PILAR_1_DESC]</p>
-                    </div>
-                    <div class="glass-panel glass-panel-hover p-8 rounded-3xl space-y-4 sm:translate-y-6">
-                        <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl">
-                            🔥
-                        </div>
-                        <h4 class="text-lg font-serif font-semibold text-white">[PILAR_2_TITULO]</h4>
-                        <p class="text-sm text-gray-400 leading-relaxed">[PILAR_2_DESC]</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="menu" class="py-28 px-6 bg-dark-950 border-t border-dark-800/80">
-        <div class="max-w-6xl mx-auto fade-in-section">
-            <div class="text-center space-y-4 mb-16">
-                <span class="text-amber-500 font-semibold tracking-widest uppercase text-xs">Exclusividad</span>
-                <h2 class="text-4xl sm:text-5xl font-serif font-bold tracking-tight text-white">[TITULO_MENU]</h2>
-                <div class="w-20 h-0.5 bg-amber-500 mx-auto"></div>
-                <p class="text-gray-400 text-sm max-w-lg mx-auto pt-2">[SUBTITULO_MENU]</p>
-            </div>
-
-            <!-- Ficha de Especialidades tipo Grid de Lujo -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Item 1 -->
-                <div class="glass-panel glass-panel-hover p-8 rounded-3xl flex flex-col justify-between space-y-6">
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-start">
-                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">[ETIQUETA_ITEM_1]</span>
-                            <span class="text-amber-400 font-serif font-bold text-lg">[PRECIO_ITEM_1]</span>
-                        </div>
-                        <h3 class="text-2xl font-serif font-semibold text-white">[NOMBRE_ITEM_1]</h3>
-                        <p class="text-sm text-gray-400 leading-relaxed">[DESC_ITEM_1]</p>
-                    </div>
-                    <div class="pt-4 border-t border-dark-700/60 flex items-center justify-between text-xs text-gray-400">
-                        <span>Origen: [ORIGEN_ITEM_1]</span>
-                        <span class="text-amber-500 font-medium">Recomendado</span>
-                    </div>
-                </div>
-
-                <!-- Item 2 -->
-                <div class="glass-panel glass-panel-hover p-8 rounded-3xl flex flex-col justify-between space-y-6 border-amber-500/30 shadow-lg shadow-amber-600/5">
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-start">
-                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">[ETIQUETA_ITEM_2]</span>
-                            <span class="text-amber-400 font-serif font-bold text-lg">[PRECIO_ITEM_2]</span>
-                        </div>
-                        <h3 class="text-2xl font-serif font-semibold text-white">[NOMBRE_ITEM_2]</h3>
-                        <p class="text-sm text-gray-400 leading-relaxed">[DESC_ITEM_2]</p>
-                    </div>
-                    <div class="pt-4 border-t border-dark-700/60 flex items-center justify-between text-xs text-gray-400">
-                        <span>Origen: [ORIGEN_ITEM_2]</span>
-                        <span class="text-amber-500 font-medium">Firma de la Casa</span>
-                    </div>
-                </div>
-
-                <!-- Item 3 -->
-                <div class="glass-panel glass-panel-hover p-8 rounded-3xl flex flex-col justify-between space-y-6">
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-start">
-                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">[ETIQUETA_ITEM_3]</span>
-                            <span class="text-amber-400 font-serif font-bold text-lg">[PRECIO_ITEM_3]</span>
-                        </div>
-                        <h3 class="text-2xl font-serif font-semibold text-white">[NOMBRE_ITEM_3]</h3>
-                        <p class="text-sm text-gray-400 leading-relaxed">[DESC_ITEM_3]</p>
-                    </div>
-                    <div class="pt-4 border-t border-dark-700/60 flex items-center justify-between text-xs text-gray-400">
-                        <span>Origen: [ORIGEN_ITEM_3]</span>
-                        <span class="text-amber-500 font-medium">Artesanal</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="horarios" class="py-28 px-6 bg-dark-900 border-t border-dark-800/80">
-        <div class="max-w-4xl mx-auto fade-in-section">
-            <div class="text-center space-y-4 mb-16">
-                <span class="text-amber-500 font-semibold tracking-widest uppercase text-xs">Disponibilidad</span>
-                <h2 class="text-4xl sm:text-5xl font-serif font-bold tracking-tight text-white">Horarios de Atención</h2>
-                <div class="w-20 h-0.5 bg-amber-500 mx-auto"></div>
-                <!-- Indicador de abierto/cerrado en tiempo real -->
-                <div id="live-status-badge" class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-dark-800 border border-dark-700 text-xs font-medium mt-3">
-                    <span id="status-dot" class="w-2.5 h-2.5 rounded-full bg-gray-500"></span>
-                    <span id="status-text" class="text-gray-300">Calculando horario...</span>
-                </div>
-            </div>
-
-            <div class="glass-panel rounded-3xl overflow-hidden shadow-2xl divide-y divide-dark-700/60 max-w-2xl mx-auto">
-                <div class="p-6 sm:p-8 flex justify-between items-center hover:bg-dark-800/40 transition-colors">
-                    <span class="font-medium text-gray-200">[DIA_HORARIO_1]</span>
-                    <span class="text-amber-400 font-serif font-medium">[HORA_1]</span>
-                </div>
-                <div class="p-6 sm:p-8 flex justify-between items-center hover:bg-dark-800/40 transition-colors">
-                    <span class="font-medium text-gray-200">[DIA_HORARIO_2]</span>
-                    <span class="text-amber-400 font-serif font-medium">[HORA_2]</span>
-                </div>
-                <div class="p-6 sm:p-8 flex justify-between items-center hover:bg-dark-800/40 transition-colors">
-                    <span class="font-medium text-gray-200">[DIA_HORARIO_3]</span>
-                    <span class="text-amber-400 font-serif font-medium">[HORA_3]</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="ubicacion" class="py-28 px-6 bg-dark-950 border-t border-dark-800/80">
-        <div class="max-w-5xl mx-auto fade-in-section">
-            <div class="text-center space-y-4 mb-16">
-                <span class="text-amber-500 font-semibold tracking-widest uppercase text-xs">Encuéntranos</span>
-                <h2 class="text-4xl sm:text-5xl font-serif font-bold tracking-tight text-white">Nuestra Ubicación</h2>
-                <div class="w-20 h-0.5 bg-amber-500 mx-auto"></div>
-                <p class="text-gray-400 text-sm max-w-md mx-auto pt-2">[DIRECCION_COMPLETA]</p>
-            </div>
-
-            <div class="glass-panel p-4 rounded-3xl shadow-2xl overflow-hidden">
-                <!-- ====================================================================================================== CAMBIAR COORDS POR DEFECTO AL MAR A LA CAFETERIA =========================================================================================================================================================================== -->
-                <div id="map" class="w-full h-[450px] rounded-2xl overflow-hidden z-10"></div>
-                <div class="p-4 flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-dark-700/60 mt-2">
-                    <div class="text-sm text-gray-400">Coordenadas: <span class="text-amber-400 font-mono">-5.977390, -155.143339</span></div><>
-                    <a href="https://maps.app.goo.gl/HmNZAZLE4s12BcLT7" target="_blank" rel="noopener noreferrer" class="px-6 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold tracking-wider uppercase transition-all shadow-md shadow-amber-600/20">
-                        Abrir en Google Maps
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="contacto" class="py-28 px-6 bg-dark-900 border-t border-dark-800/80">
-        <div class="max-w-4xl mx-auto fade-in-section text-center">
-            <div class="space-y-4 mb-16">
-                <span class="text-amber-500 font-semibold tracking-widest uppercase text-xs">Conexión Directa</span>
-                <h2 class="text-4xl sm:text-5xl font-serif font-bold tracking-tight text-white">[TITULO_CONTACTO]</h2>
-                <div class="w-20 h-0.5 bg-amber-500 mx-auto"></div>
-                <p class="text-gray-400 text-sm">[SUBTITULO_CONTACTO]</p>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
-                <a href="mailto:[CORREO_CONTACTO]" class="glass-panel glass-panel-hover p-8 rounded-3xl flex flex-col items-center space-y-4 shadow-xl group">
-                    <div class="w-14 h-14 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform border border-amber-500/20">
-                        ✉️
-                    </div>
-                    <div>
-                        <div class="text-xs text-gray-400 uppercase tracking-wider">Correo Electrónico</div>
-                        <div class="text-white font-serif font-semibold mt-1 break-all text-sm sm:text-base">[CORREO_CONTACTO]</div>
-                    </div>
-                </a>
-
-                <a href="https://wa.me/[NUMERO_WHATSAPP]?text=Hola,%20deseo%20más%20información%20sobre%20[NOMBRE_DE_LA_CAFETERIA]" target="_blank" rel="noopener noreferrer" class="glass-panel glass-panel-hover p-8 rounded-3xl flex flex-col items-center space-y-4 shadow-xl group">
-                    <div class="w-14 h-14 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform border border-amber-500/20">
-                        💬
-                    </div>
-                    <div>
-                        <div class="text-xs text-gray-400 uppercase tracking-wider">WhatsApp Directo</div>
-                        <div class="text-white font-serif font-semibold mt-1 text-sm sm:text-base">[NUMERO_WHATSAPP]</div>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <footer class="bg-dark-950 border-t border-dark-800 py-12 px-6 text-center text-sm text-gray-500">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-            <div class="font-serif text-white text-lg tracking-wider">[NOMBRE_DE_LA_CAFETERIA]</div>
-            <div>&copy; 2026 [NOMBRE_DE_LA_CAFETERIA]. Todos los derechos reservados.</div>
-            <div class="flex space-x-6 text-xs text-gray-400">
-                <a href="#inicio" class="hover:text-amber-400 transition-colors">Volver arriba</a>
-            </div>
-        </div>
+    <footer>
+        <p>&copy; 2026 [NOMBRE_DE_LA_CAFETERIA]. Todos los derechos reservados.</p>
     </footer>
 
-    <div id="reservation-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="glass-panel w-full max-w-md p-8 rounded-3xl shadow-2xl relative transform scale-95 transition-transform duration-300" id="modal-content">
-            <button onclick="closeModal()" class="absolute top-6 right-6 text-gray-400 hover:text-white p-2">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            </button>
-            <div class="space-y-6">
-                <div>
-                    <span class="text-amber-500 text-xs font-semibold uppercase tracking-widest">Exclusividad</span>
-                    <h3 class="text-2xl font-serif font-bold text-white mt-1">Reservar Mesa</h3>
-                    <p class="text-xs text-gray-400 mt-1">Asegura tu experiencia en [NOMBRE_DE_LA_CAFETERIA]</p>
-                </div>
-                <form onsubmit="handleReservation(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-medium text-gray-300 mb-1">Nombre Completo</label>
-                        <input type="text" required class="w-full px-4 py-3 rounded-xl bg-dark-900 border border-dark-700 text-white text-sm focus:outline-none focus:border-amber-500 transition-colors" placeholder="Tu nombre">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-300 mb-1">Número de Personas</label>
-                        <select class="w-full px-4 py-3 rounded-xl bg-dark-900 border border-dark-700 text-white text-sm focus:outline-none focus:border-amber-500 transition-colors">
-                            <option>1 persona</option>
-                            <option selected>2 personas</option>
-                            <option>3 - 4 personas</option>
-                            <option>Grupo (5+ personas)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-300 mb-1">Fecha y Hora Preferida</label>
-                        <input type="datetime-local" required class="w-full px-4 py-3 rounded-xl bg-dark-900 border border-dark-700 text-white text-sm focus:outline-none focus:border-amber-500 transition-colors">
-                    </div>
-                    <button type="submit" class="w-full py-4 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-medium text-sm transition-all shadow-lg shadow-amber-600/25">
-                        Confirmar Solicitud
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    
     <script>
-        // Menú móvil
-        const menuBtn = document.getElementById('menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        menuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        function closeMobileMenu() {
-            mobileMenu.classList.add('hidden');
-        }
-
-        window.addEventListener('scroll', () => {
-            const winScroll = document.documentElement.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
-            document.getElementById('scroll-progress').style.width = scrolled + '%';
-
-            const navbar = document.getElementById('navbar');
-            if (winScroll > 50) {
-                navbar.classList.add('bg-dark-950/95', 'shadow-xl');
-            } else {
-                navbar.classList.remove('bg-dark-950/95', 'shadow-xl');
-            }
-        });
-
-        document.addEventListener("DOMContentLoaded", function () {
-            const observerOptions = {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.1
-            };
-
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, observerOptions);
-
-            document.querySelectorAll('.fade-in-section').forEach(section => {
-                observer.observe(section);
-            });
-
-            const lat = -5.977390;
-            const lng = -155.143339;
-            const map = L.map('map', {
-                zoomControl: false
-            }).setView([lat, lng], 15);
-
-            L.control.zoom({ position: 'bottomright' }).addTo(map);
-
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
-                maxZoom: 19
-            }).addTo(map);
-
-            const customIcon = L.divIcon({
-                className: 'custom-map-marker',
-                html: '<div style="background-color: #d97706; width: 24px; height: 24px; border-radius: 50%; border: 3px solid #ffffff; box-shadow: 0 0 15px rgba(217,119,6,0.8);"></div>',
-                iconSize: [24, 24],
-                iconAnchor: [12, 12]
-            });
-
-            const marker = L.marker([lat, lng], { icon: customIcon }).addTo(map);
-            marker.bindPopup("<div style='padding: 8px;'><strong style='font-family: Playfair Display, serif; font-size: 16px; color: #fbbf24;'>[NOMBRE_DE_LA_CAFETERIA]</strong><br><p style='font-size: 12px; color: #d1d5db; margin-top: 4px;'>[DIRECCION_COMPLETA]</p><a href='https://maps.app.goo.gl/HmNZAZLE4s12BcLT7' target='_blank' style='display: inline-block; margin-top: 8px; color: #d97706; font-size: 11px; font-weight: 600; text-decoration: underline;'>Ver en Google Maps</a></div>").openPopup();
-
-            // Verificador de horario en tiempo real (Ejemplo estimado de 8:00 AM a 10:00 PM)
-            const now = new Date();
-            const hour = now.getHours();
-            const statusDot = document.getElementById('status-dot');
-            const statusText = document.getElementById('status-text');
-
-            if (hour >= 8 && hour < 22) {
-                statusDot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse';
-                statusText.textContent = 'Abierto ahora · Te esperamos';
-            } else {
-                statusDot.className = 'w-2.5 h-2.5 rounded-full bg-amber-500';
-                statusText.textContent = 'Cerrado ahora · Abre mañana a las 8:00 AM';
-            }
-        });
-
-        // Funciones del Modal de Reserva
-        const modal = document.getElementById('reservation-modal');
-        const modalContent = document.getElementById('modal-content');
-
-        function openModal() {
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            modalContent.classList.remove('scale-95');
-            modalContent.classList.add('scale-100');
-        }
-
-        function closeModal() {
-            modal.classList.add('opacity-0', 'pointer-events-none');
-            modalContent.classList.remove('scale-100');
-            modalContent.classList.add('scale-95');
-        }
-
-        function handleReservation(e) {
-            e.preventDefault();
-            closeModal();
-            const notification = document.createElement('div');
-            notification.className = 'fixed bottom-6 right-6 z-50 glass-panel px-6 py-4 rounded-2xl border border-amber-500/40 text-white shadow-2xl transition-all';
-            notification.innerHTML = '<div class="flex items-center space-x-3"><span class="text-amber-400 text-lg">✨</span><div><div class="font-serif font-semibold">¡Solicitud Recibida!</div><div class="text-xs text-gray-300">Te contactaremos pronto para confirmar tu mesa.</div></div></div>';
-            document.body.appendChild(notification);
-            setTimeout(() => {
-                notification.style.opacity = '0';
-                setTimeout(() => notification.remove(), 500);
-            }, 4000);
-        }
+        const lat = -5.977390;
+        const lng = -155.143339;
+        const map = L.map('map', {
+            zoomControl: false
+        }).setView([lat, lng], 16);
+        L.control.zoom({ position: 'topright' }).addTo(map);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+        }).addTo(map);
+        L.marker([lat, lng]).addTo(map)
+            .bindPopup('<b>[NOMBRE_DE_LA_CAFETERIA]</b><br>[DIRECCION_COMPLETA]')
+            .openPopup();
     </script>
 </body>
 </html>
